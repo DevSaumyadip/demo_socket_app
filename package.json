@@ -1,0 +1,34 @@
+{
+  "name": "demo_socket_app",
+  "version": "1.0.0",
+  "description": "this is socket app to register user",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DevSaumyadip/demo_socket_app.git"
+  },
+  "keywords": [
+    "socket.io",
+    "express",
+    "nodejs"
+  ],
+  "author": "Saumyadip Biswas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DevSaumyadip/demo_socket_app/issues"
+  },
+  "homepage": "https://github.com/DevSaumyadip/demo_socket_app#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "path": "^0.12.7",
+    "socket.io": "^2.3.0"
+  }
+}
