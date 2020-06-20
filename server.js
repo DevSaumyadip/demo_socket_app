@@ -7,6 +7,7 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const fs = require('fs');
 const db = './database/database.json';
+const service = require('./service/index.js');
 
 const {
     PORT = 8981
@@ -69,13 +70,19 @@ io.on('connection', (socket) => {
                     email: email,
                     phone: phone,
                     message: message
-                })
+                });
                 fs.writeFile(db, JSON.stringify(arrayOfObjects), (err,data) => {
                     if (err) {
                         //return res.send({ message: 'error with json db', data: err });
                     } else {
                         //return res.send({ message: ' you have been successfully registared ', data: { name, email, phone, message } });
-                        console.log("data", data)
+                        let options = {
+                            name: name,
+                            to: email,
+                            phone: phone
+                        }
+                        service.mailNotification.sendMail(options);
+                        service.smsNotification.sendSms(options);
                     }
                 });
             }
