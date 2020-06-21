@@ -98,25 +98,20 @@
 <script type='text/javascript'>
     $(document).ready(() => {
         jQuery('#formData input').on('click', function () {
-            //jQuery(this).removeClass('errorMessage');
         });
-
         jQuery('.registerbtn').on('click', function (e) {
             e.preventDefault();
             const name = jQuery("#name").val();
             const email = jQuery("#email").val();
             const phone = jQuery("#phone").val();
             const message = jQuery("#message").val();
-
             const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             const phoneRegex = /^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$/gm;
-
-            var isValid = true;
+            let isValid = true;
             if (name.length === 0 || name === null) {
                 isValid = false;
                 alert("name is empty");
             }
-
             if (email.length === 0 || email === null) {
                 isValid = false;
                 alert("email is empty");
@@ -124,7 +119,6 @@
                 isValid = false;
                 alert("invalid email");
             }
-
             if (phone.length === 0 || phone === null) {
                 isValid = false;
                 alert("phome is empty");
@@ -132,7 +126,6 @@
                 isValid = false;
                 alert("invalid phone");
             }
-
             if (isValid) {
                 const socket = io.connect('http://localhost:8981');
                 socket.emit('form-submit', {
@@ -142,29 +135,8 @@
                     "message": message
                 });
                 jQuery("form").trigger("reset");
-                // jQuery.ajax({
-                //     type: 'POST',
-                //     //headers: { 'api_key': "" },
-                //     url: "http://localhost:8981/api/register",
-                //     data: {
-                //         "name": name,
-                //         "email": email,
-                //         "phone": phone,
-                //         "message": message
-                //     },
-
-                //     success: function (result, status) {
-                //         if (status === 'success') {
-                //             console.log("result", result);
-                //         }
-                //     },
-                //     error: function (xhr, status, errorThrown) {
-                //         console.log(xhr, status, errorThrown)
-                //     }
-                // });
             }
         });
     });
 </script>
-
 </html>

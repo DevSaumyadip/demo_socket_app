@@ -43,7 +43,6 @@ function initializeStaicPath() {
     app.use('/', express.static(path.join(__dirname, 'public')));
 }
 
-
 function init() {
     initializeStaicPath();
 }
@@ -60,9 +59,7 @@ io.on('connection', (socket) => {
     socket.on('form-submit', (data) => {
         let { name, email, phone, message } = data;
         fs.readFile(db, 'utf8', (err, jsonString) => {
-            if (err) {
-                //return res.send({ message: 'error with json db', data: err });
-            } else {
+            if (!err) {
                 let arrayOfObjects = JSON.parse(jsonString);
                 last = Object.keys(arrayOfObjects.table)[Object.keys(arrayOfObjects.table).length - 1];
                 arrayOfObjects.table.push({
@@ -73,10 +70,7 @@ io.on('connection', (socket) => {
                     message: message
                 });
                 fs.writeFile(db, JSON.stringify(arrayOfObjects), (err) => {
-                    if (err) {
-                        //return res.send({ message: 'error with json db', data: err });
-                    } else {
-                        //return res.send({ message: ' you have been successfully registared ', data: { name, email, phone, message } });
+                    if (!err) {
                         let options = {
                             name: name,
                             to: email,
@@ -88,7 +82,6 @@ io.on('connection', (socket) => {
                 });
             }
         });
-
         socket.broadcast.emit('form-submit', data);
     });
 });
