@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: black;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Add padding to containers */
+        .container {
+            padding: 16px;
+            background-color: white;
+        }
+
+        /* Full-width input fields */
+        input[type=text],
+        input[type=password] {
+            width: 100%;
+            padding: 15px;
+            margin: 5px 0 22px 0;
+            display: inline-block;
+            border: none;
+            background: #f1f1f1;
+        }
+
+        input[type=text]:focus,
+        input[type=password]:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
+        /* Overwrite default styles of hr */
+        hr {
+            border: 1px solid #f1f1f1;
+            margin-bottom: 25px;
+        }
+
+        /* Set a style for the submit button */
+        .registerbtn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 16px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            opacity: 0.9;
+        }
+
+        .registerbtn:hover {
+            opacity: 1;
+        }
+
+        /* Add a blue text color to links */
+        a {
+            color: dodgerblue;
+        }
+
+        /* Set a grey background color and center the text of the "sign in" section */
+        .signin {
+            background-color: #f1f1f1;
+            text-align: center;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.1/socket.io.js"></script>
+</head>
+
+<body>
+    <div class="mainContainer">
+        <div class="container">
+            <h1>RealTime Registration Form </h1>
+            <ul>
+                <li id="name"> </li>
+                <li id="email"> </li>
+                <li id="phone"> </li>
+                <li id="message"> </li>
+            </ul>
+        </div>
+        <div class="container">
+            <h1>All Registrated User</h1>
+            <div id="data_api">
+
+            </div>
+        </div>
+    </div>
+</body>
+
+<script type='text/javascript'>
+    const socket = io.connect('http://localhost:8981');
+    socket.on('form-submit', function (data) {
+        console.log("data", data);
+        let { name, email, phone, message } = data;
+        $(document).ready(() => {
+            $("#name").text(name);
+            $("#email").text(email);
+            $("#phone").text(phone);
+            $("#message").text(message);
+        });
+    });
+
+    jQuery.ajax({
+        type: 'GET',
+        //headers: { 'api_key': "" },
+        url: "http://localhost:8981/api/all-users",
+
+        success: function (result, status) {
+
+            if (status === 'success') {
+                var table = document.createElement('table');
+                for (var i = 1; i < result.data.table.length; i++) {
+                    var tr = document.createElement('tr');
+                    var td1 = document.createElement('td');
+                    var td2 = document.createElement('td');
+                    var td3 = document.createElement('td');
+                    var td4 = document.createElement('td');
+                    var td5 = document.createElement('td');
+                    var text1 = document.createTextNode(result.data.table[i]._id);
+                    var text2 = document.createTextNode(result.data.table[i].name);
+                    var text3 = document.createTextNode(result.data.table[i].email);
+                    var text4 = document.createTextNode(result.data.table[i].phone);
+                    var text5 = document.createTextNode(result.data.table[i].message);
+                    td1.appendChild(text1);
+                    td2.appendChild(text2);
+                    td3.appendChild(text3);
+                    td4.appendChild(text4);
+                    td5.appendChild(text5);
+                    tr.appendChild(td1);
+                    tr.appendChild(td2);
+                    tr.appendChild(td3);
+                    tr.appendChild(td4);
+                    tr.appendChild(td5);
+                    table.appendChild(tr);
+                }
+                $("#data_api").append(table);
+            }
+        },
+        error: function (xhr, status, errorThrown) {
+            console.log(xhr, status, errorThrown)
+        }
+    });
+</script>
+
+</html>

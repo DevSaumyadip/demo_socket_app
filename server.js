@@ -56,6 +56,7 @@ init();
 server.listen(PORT, () => console.log(`Weather Station app listening on port ${PORT}!`))
 
 io.on('connection', (socket) => {
+    console.log('made socket connection with', socket.id);
     socket.on('form-submit', (data) => {
         let { name, email, phone, message } = data;
         fs.readFile(db, 'utf8', (err, jsonString) => {
@@ -71,7 +72,7 @@ io.on('connection', (socket) => {
                     phone: phone,
                     message: message
                 });
-                fs.writeFile(db, JSON.stringify(arrayOfObjects), (err,data) => {
+                fs.writeFile(db, JSON.stringify(arrayOfObjects), (err) => {
                     if (err) {
                         //return res.send({ message: 'error with json db', data: err });
                     } else {
@@ -87,5 +88,7 @@ io.on('connection', (socket) => {
                 });
             }
         });
+
+        socket.broadcast.emit('form-submit', data);
     });
 });
